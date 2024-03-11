@@ -86,7 +86,7 @@
         "images"
       ]
     },
-    "asal_daerah": {
+    "hometown": {
       "type": "string"
     },
     "phone": {

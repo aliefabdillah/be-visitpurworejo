@@ -1,0 +1,54 @@
+{
+  "kind": "collectionType",
+  "collectionName": "artikels",
+  "info": {
+    "singularName": "artikel",
+    "pluralName": "artikels",
+    "displayName": "Artikel",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
+    },
+    "publish_date": {
+      "type": "datetime",
+      "required": true,
+      "unique": false
+    },
+    "content": {
+      "type": "blocks",
+      "required": true
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "published",
+        "draft",
+        "verification"
+      ],
+      "required": true
+    },
+    "notes": {
+      "type": "text"
+    },
+    "img_cover": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false,
+      "required": true
+    }
+  }
+}

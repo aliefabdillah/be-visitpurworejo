@@ -83,7 +83,7 @@ module.exports = (plugin) => {
           isAdmin: user.isAdmin,
           isActive: user.isActive,
           point: parseInt(user.point),
-          asal_daerah: user.asal_daerah,
+          hometown: user.hometown,
           fullname: user.fullname,
           img_profile: user.img_profile
         }
@@ -110,7 +110,7 @@ module.exports = (plugin) => {
           isAdmin: user.isAdmin,
           isActive: user.isActive,
           point: parseInt(user.point),
-          asal_daerah: user.asal_daerah,
+          hometown: user.hometown,
           fullname: user.fullname,
           img_profile: user.img_profile
         }
