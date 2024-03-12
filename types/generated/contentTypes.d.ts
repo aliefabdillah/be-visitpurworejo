@@ -382,6 +382,16 @@ export interface ApiArtikelArtikel extends Schema.CollectionType {
       Attribute.Required;
     notes: Attribute.Text;
     img_cover: Attribute.Media & Attribute.Required;
+    user_id: Attribute.Relation<
+      'api::artikel.artikel',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    kategori_id: Attribute.Relation<
+      'api::artikel.artikel',
+      'manyToOne',
+      'api::kategori.kategori'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -393,6 +403,42 @@ export interface ApiArtikelArtikel extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::artikel.artikel',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiKategoriKategori extends Schema.CollectionType {
+  collectionName: 'kategoris';
+  info: {
+    singularName: 'kategori';
+    pluralName: 'kategoris';
+    displayName: 'Kategori';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String;
+    artikel_id: Attribute.Relation<
+      'api::kategori.kategori',
+      'oneToMany',
+      'api::artikel.artikel'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::kategori.kategori',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::kategori.kategori',
       'oneToOne',
       'admin::user'
     > &
@@ -819,6 +865,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
         maxLength: 15;
       }>;
     fullname: Attribute.String;
+    artikel_id: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::artikel.artikel'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -886,6 +937,7 @@ declare module '@strapi/types' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'api::artikel.artikel': ApiArtikelArtikel;
+      'api::kategori.kategori': ApiKategoriKategori;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::content-releases.release': PluginContentReleasesRelease;

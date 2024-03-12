@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "kategoris",
+  "info": {
+    "singularName": "kategori",
+    "pluralName": "kategoris",
+    "displayName": "Kategori",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "artikel_id": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::artikel.artikel",
+      "mappedBy": "kategori_id"
+    }
+  }
+}

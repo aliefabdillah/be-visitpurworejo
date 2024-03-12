@@ -96,6 +96,12 @@
     },
     "fullname": {
       "type": "string"
+    },
+    "artikel_id": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::artikel.artikel",
+      "mappedBy": "user_id"
     }
   }
 }
