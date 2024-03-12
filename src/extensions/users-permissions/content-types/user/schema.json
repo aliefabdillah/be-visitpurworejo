@@ -102,6 +102,24 @@
       "relation": "oneToMany",
       "target": "api::artikel.artikel",
       "mappedBy": "user_id"
+    },
+    "wisata_favorite_id": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::wisata-favorite.wisata-favorite",
+      "mappedBy": "user_id"
+    },
+    "ulasan_id": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::ulasan.ulasan",
+      "mappedBy": "user_id"
+    },
+    "laporan_ulasan_ids": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::laporan-ulasan.laporan-ulasan",
+      "mappedBy": "reporter_id"
     }
   }
 }

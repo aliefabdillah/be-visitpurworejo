@@ -1,0 +1,75 @@
+{
+  "kind": "collectionType",
+  "collectionName": "wisatas",
+  "info": {
+    "singularName": "wisata",
+    "pluralName": "wisatas",
+    "displayName": "Wisata"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name"
+    },
+    "location": {
+      "type": "string",
+      "required": true
+    },
+    "jenis_wisata": {
+      "type": "enumeration",
+      "enum": [
+        "destinasi",
+        "akomodasi",
+        "kuliner",
+        "lainnya"
+      ],
+      "required": true
+    },
+    "short_content": {
+      "type": "string",
+      "required": true
+    },
+    "content": {
+      "type": "text",
+      "required": true
+    },
+    "img_cover": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false,
+      "required": true
+    },
+    "gallery": {
+      "allowedTypes": [
+        "images",
+        "videos"
+      ],
+      "type": "media",
+      "multiple": true,
+      "required": true
+    },
+    "wisata_favorites": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::wisata-favorite.wisata-favorite",
+      "mappedBy": "wisata_id"
+    },
+    "ulasan_id": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::ulasan.ulasan",
+      "mappedBy": "post_wisata_id"
+    }
+  }
+}

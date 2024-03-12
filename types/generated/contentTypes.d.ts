@@ -362,90 +362,6 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
-export interface ApiArtikelArtikel extends Schema.CollectionType {
-  collectionName: 'artikels';
-  info: {
-    singularName: 'artikel';
-    pluralName: 'artikels';
-    displayName: 'Artikel';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    title: Attribute.String & Attribute.Required & Attribute.Unique;
-    slug: Attribute.UID<'api::artikel.artikel', 'title'>;
-    publish_date: Attribute.DateTime & Attribute.Required;
-    content: Attribute.Blocks & Attribute.Required;
-    status: Attribute.Enumeration<['published', 'draft', 'verification']> &
-      Attribute.Required;
-    notes: Attribute.Text;
-    img_cover: Attribute.Media & Attribute.Required;
-    user_id: Attribute.Relation<
-      'api::artikel.artikel',
-      'manyToOne',
-      'plugin::users-permissions.user'
-    >;
-    kategori_id: Attribute.Relation<
-      'api::artikel.artikel',
-      'manyToOne',
-      'api::kategori.kategori'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::artikel.artikel',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::artikel.artikel',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiKategoriKategori extends Schema.CollectionType {
-  collectionName: 'kategoris';
-  info: {
-    singularName: 'kategori';
-    pluralName: 'kategoris';
-    displayName: 'Kategori';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    name: Attribute.String;
-    artikel_id: Attribute.Relation<
-      'api::kategori.kategori',
-      'oneToMany',
-      'api::artikel.artikel'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::kategori.kategori',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::kategori.kategori',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -823,6 +739,21 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::artikel.artikel'
     >;
+    wisata_favorite_id: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::wisata-favorite.wisata-favorite'
+    >;
+    ulasan_id: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::ulasan.ulasan'
+    >;
+    laporan_ulasan_ids: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::laporan-ulasan.laporan-ulasan'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -926,6 +857,282 @@ export interface PluginSlugifySlug extends Schema.CollectionType {
   };
 }
 
+export interface ApiArtikelArtikel extends Schema.CollectionType {
+  collectionName: 'artikels';
+  info: {
+    singularName: 'artikel';
+    pluralName: 'artikels';
+    displayName: 'Artikel';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Attribute.String & Attribute.Required & Attribute.Unique;
+    slug: Attribute.UID<'api::artikel.artikel', 'title'>;
+    publish_date: Attribute.DateTime & Attribute.Required;
+    content: Attribute.Blocks & Attribute.Required;
+    status: Attribute.Enumeration<['published', 'draft', 'verification']> &
+      Attribute.Required;
+    notes: Attribute.Text;
+    img_cover: Attribute.Media & Attribute.Required;
+    user_id: Attribute.Relation<
+      'api::artikel.artikel',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    kategori_id: Attribute.Relation<
+      'api::artikel.artikel',
+      'manyToOne',
+      'api::kategori.kategori'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::artikel.artikel',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::artikel.artikel',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiKategoriKategori extends Schema.CollectionType {
+  collectionName: 'kategoris';
+  info: {
+    singularName: 'kategori';
+    pluralName: 'kategoris';
+    displayName: 'Kategori';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String;
+    artikel_id: Attribute.Relation<
+      'api::kategori.kategori',
+      'oneToMany',
+      'api::artikel.artikel'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::kategori.kategori',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::kategori.kategori',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiLaporanUlasanLaporanUlasan extends Schema.CollectionType {
+  collectionName: 'laporan_ulasans';
+  info: {
+    singularName: 'laporan-ulasan';
+    pluralName: 'laporan-ulasans';
+    displayName: 'LaporanUlasan';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    category: Attribute.String & Attribute.Required;
+    detail: Attribute.Text;
+    report_date: Attribute.DateTime & Attribute.Required;
+    ulasan_id: Attribute.Relation<
+      'api::laporan-ulasan.laporan-ulasan',
+      'manyToOne',
+      'api::ulasan.ulasan'
+    >;
+    reporter_id: Attribute.Relation<
+      'api::laporan-ulasan.laporan-ulasan',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::laporan-ulasan.laporan-ulasan',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::laporan-ulasan.laporan-ulasan',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiUlasanUlasan extends Schema.CollectionType {
+  collectionName: 'ulasans';
+  info: {
+    singularName: 'ulasan';
+    pluralName: 'ulasans';
+    displayName: 'Ulasan';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    content: Attribute.Text & Attribute.Required;
+    posting_date: Attribute.DateTime & Attribute.Required;
+    like: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
+    dislike: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
+    isDeleted: Attribute.Boolean & Attribute.DefaultTo<false>;
+    user_id: Attribute.Relation<
+      'api::ulasan.ulasan',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    post_wisata_id: Attribute.Relation<
+      'api::ulasan.ulasan',
+      'manyToOne',
+      'api::wisata.wisata'
+    >;
+    parent_comment_id: Attribute.Relation<
+      'api::ulasan.ulasan',
+      'manyToOne',
+      'api::ulasan.ulasan'
+    >;
+    child_comment_id: Attribute.Relation<
+      'api::ulasan.ulasan',
+      'oneToMany',
+      'api::ulasan.ulasan'
+    >;
+    laporan_ulasan_ids: Attribute.Relation<
+      'api::ulasan.ulasan',
+      'oneToMany',
+      'api::laporan-ulasan.laporan-ulasan'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::ulasan.ulasan',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::ulasan.ulasan',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiWisataWisata extends Schema.CollectionType {
+  collectionName: 'wisatas';
+  info: {
+    singularName: 'wisata';
+    pluralName: 'wisatas';
+    displayName: 'Wisata';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required & Attribute.Unique;
+    slug: Attribute.UID<'api::wisata.wisata', 'name'>;
+    location: Attribute.String & Attribute.Required;
+    jenis_wisata: Attribute.Enumeration<
+      ['destinasi', 'akomodasi', 'kuliner', 'lainnya']
+    > &
+      Attribute.Required;
+    short_content: Attribute.String & Attribute.Required;
+    content: Attribute.Text & Attribute.Required;
+    img_cover: Attribute.Media & Attribute.Required;
+    gallery: Attribute.Media & Attribute.Required;
+    wisata_favorites: Attribute.Relation<
+      'api::wisata.wisata',
+      'oneToMany',
+      'api::wisata-favorite.wisata-favorite'
+    >;
+    ulasan_id: Attribute.Relation<
+      'api::wisata.wisata',
+      'oneToMany',
+      'api::ulasan.ulasan'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::wisata.wisata',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::wisata.wisata',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiWisataFavoriteWisataFavorite extends Schema.CollectionType {
+  collectionName: 'wisata_favorites';
+  info: {
+    singularName: 'wisata-favorite';
+    pluralName: 'wisata-favorites';
+    displayName: 'WisataFavorite';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    wisata_id: Attribute.Relation<
+      'api::wisata-favorite.wisata-favorite',
+      'manyToOne',
+      'api::wisata.wisata'
+    >;
+    user_id: Attribute.Relation<
+      'api::wisata-favorite.wisata-favorite',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::wisata-favorite.wisata-favorite',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::wisata-favorite.wisata-favorite',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -936,8 +1143,6 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
-      'api::artikel.artikel': ApiArtikelArtikel;
-      'api::kategori.kategori': ApiKategoriKategori;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::content-releases.release': PluginContentReleasesRelease;
@@ -947,6 +1152,12 @@ declare module '@strapi/types' {
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'plugin::i18n.locale': PluginI18NLocale;
       'plugin::slugify.slug': PluginSlugifySlug;
+      'api::artikel.artikel': ApiArtikelArtikel;
+      'api::kategori.kategori': ApiKategoriKategori;
+      'api::laporan-ulasan.laporan-ulasan': ApiLaporanUlasanLaporanUlasan;
+      'api::ulasan.ulasan': ApiUlasanUlasan;
+      'api::wisata.wisata': ApiWisataWisata;
+      'api::wisata-favorite.wisata-favorite': ApiWisataFavoriteWisataFavorite;
     }
   }
 }

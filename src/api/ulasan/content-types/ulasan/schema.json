@@ -1,0 +1,67 @@
+{
+  "kind": "collectionType",
+  "collectionName": "ulasans",
+  "info": {
+    "singularName": "ulasan",
+    "pluralName": "ulasans",
+    "displayName": "Ulasan",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "content": {
+      "type": "text",
+      "required": true
+    },
+    "posting_date": {
+      "type": "datetime",
+      "required": true
+    },
+    "like": {
+      "type": "biginteger",
+      "default": "0"
+    },
+    "dislike": {
+      "type": "biginteger",
+      "default": "0"
+    },
+    "isDeleted": {
+      "type": "boolean",
+      "default": false,
+      "required": false
+    },
+    "user_id": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "ulasan_id"
+    },
+    "post_wisata_id": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::wisata.wisata",
+      "inversedBy": "ulasan_id"
+    },
+    "parent_comment_id": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::ulasan.ulasan",
+      "inversedBy": "child_comment_id"
+    },
+    "child_comment_id": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::ulasan.ulasan",
+      "mappedBy": "parent_comment_id"
+    },
+    "laporan_ulasan_ids": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::laporan-ulasan.laporan-ulasan",
+      "mappedBy": "ulasan_id"
+    }
+  }
+}
