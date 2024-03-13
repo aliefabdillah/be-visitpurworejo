@@ -19,6 +19,15 @@ module.exports = {
         policies: [],
         middlewares: [],
       },
-    }
+    },
+    {
+      method: 'GET',
+      path: '/cerita-kami',
+      handler: 'artikel.getCeritaKami',
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
   ]
 }

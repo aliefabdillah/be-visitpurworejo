@@ -119,5 +119,43 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
       console.error(error);
       ctx.badRequest('Error get Articles');
     }
+  },
+
+  async getCeritaKami(ctx) {
+    try {
+      const data =  await strapi.db.query("api::artikel.artikel").findMany({
+        select: ['id', 'title', 'slug', 'short_content'],
+        limit: 5,
+        populate: {
+          user_id: {
+            select: ['id', 'username', 'hometown'],
+            populate: {
+              img_profile: true
+            }
+          },
+          img_cover: true,
+        },
+        where: {
+          ['kategori_id']: {
+            name: { $eq: 'Pengalaman Wisata'}
+          }
+        }
+      });
+
+      if (data) {
+        ctx.send({ data: data})
+      } else {
+        ctx.send({
+          data: {
+            code: 401,
+            message: "Cerita Not Found"
+          }
+        })
+      }
+
+    } catch (error) {
+      console.error(error);
+      ctx.badRequest('Error get cerita');
+    }
   }
 }));
