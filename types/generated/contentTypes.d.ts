@@ -754,6 +754,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::laporan-ulasan.laporan-ulasan'
     >;
+    like_dislike_ulasans: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::like-dislike-ulasan.like-dislike-ulasan'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -870,13 +875,12 @@ export interface ApiArtikelArtikel extends Schema.CollectionType {
   };
   attributes: {
     title: Attribute.String & Attribute.Required & Attribute.Unique;
-    slug: Attribute.UID<'api::artikel.artikel', 'title'>;
-    publish_date: Attribute.DateTime & Attribute.Required;
-    content: Attribute.Blocks & Attribute.Required;
-    status: Attribute.Enumeration<['published', 'draft', 'verification']> &
-      Attribute.Required;
+    slug: Attribute.UID<'api::artikel.artikel', 'title'> & Attribute.Required;
+    publish_date: Attribute.DateTime;
+    content: Attribute.Blocks;
+    status: Attribute.Enumeration<['published', 'draft', 'verification']>;
     notes: Attribute.Text;
-    img_cover: Attribute.Media & Attribute.Required;
+    img_cover: Attribute.Media;
     user_id: Attribute.Relation<
       'api::artikel.artikel',
       'manyToOne',
@@ -887,6 +891,10 @@ export interface ApiArtikelArtikel extends Schema.CollectionType {
       'manyToOne',
       'api::kategori.kategori'
     >;
+    short_content: Attribute.Text &
+      Attribute.SetMinMaxLength<{
+        maxLength: 255;
+      }>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -923,6 +931,7 @@ export interface ApiKategoriKategori extends Schema.CollectionType {
       'oneToMany',
       'api::artikel.artikel'
     >;
+    slug: Attribute.UID<'api::kategori.kategori', 'name'> & Attribute.Required;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -984,6 +993,49 @@ export interface ApiLaporanUlasanLaporanUlasan extends Schema.CollectionType {
   };
 }
 
+export interface ApiLikeDislikeUlasanLikeDislikeUlasan
+  extends Schema.CollectionType {
+  collectionName: 'like_dislike_ulasans';
+  info: {
+    singularName: 'like-dislike-ulasan';
+    pluralName: 'like-dislike-ulasans';
+    displayName: 'LikeDislikeUlasan';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    ulasan_id: Attribute.Relation<
+      'api::like-dislike-ulasan.like-dislike-ulasan',
+      'manyToOne',
+      'api::ulasan.ulasan'
+    >;
+    user_id: Attribute.Relation<
+      'api::like-dislike-ulasan.like-dislike-ulasan',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    isLike: Attribute.Boolean & Attribute.DefaultTo<false>;
+    isDislike: Attribute.Boolean & Attribute.DefaultTo<false>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::like-dislike-ulasan.like-dislike-ulasan',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::like-dislike-ulasan.like-dislike-ulasan',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiUlasanUlasan extends Schema.CollectionType {
   collectionName: 'ulasans';
   info: {
@@ -1025,6 +1077,11 @@ export interface ApiUlasanUlasan extends Schema.CollectionType {
       'api::ulasan.ulasan',
       'oneToMany',
       'api::laporan-ulasan.laporan-ulasan'
+    >;
+    like_dislike_ulasan_id: Attribute.Relation<
+      'api::ulasan.ulasan',
+      'oneToMany',
+      'api::like-dislike-ulasan.like-dislike-ulasan'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -1155,6 +1212,7 @@ declare module '@strapi/types' {
       'api::artikel.artikel': ApiArtikelArtikel;
       'api::kategori.kategori': ApiKategoriKategori;
       'api::laporan-ulasan.laporan-ulasan': ApiLaporanUlasanLaporanUlasan;
+      'api::like-dislike-ulasan.like-dislike-ulasan': ApiLikeDislikeUlasanLikeDislikeUlasan;
       'api::ulasan.ulasan': ApiUlasanUlasan;
       'api::wisata.wisata': ApiWisataWisata;
       'api::wisata-favorite.wisata-favorite': ApiWisataFavoriteWisataFavorite;

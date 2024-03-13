@@ -120,6 +120,12 @@
       "relation": "oneToMany",
       "target": "api::laporan-ulasan.laporan-ulasan",
       "mappedBy": "reporter_id"
+    },
+    "like_dislike_ulasans": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::like-dislike-ulasan.like-dislike-ulasan",
+      "mappedBy": "user_id"
     }
   }
 }

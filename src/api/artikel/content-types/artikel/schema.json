@@ -19,16 +19,17 @@
     },
     "slug": {
       "type": "uid",
-      "targetField": "title"
+      "targetField": "title",
+      "required": true
     },
     "publish_date": {
       "type": "datetime",
-      "required": true,
+      "required": false,
       "unique": false
     },
     "content": {
       "type": "blocks",
-      "required": true
+      "required": false
     },
     "status": {
       "type": "enumeration",
@@ -37,7 +38,7 @@
         "draft",
         "verification"
       ],
-      "required": true
+      "required": false
     },
     "notes": {
       "type": "text"
@@ -45,7 +46,7 @@
     "img_cover": {
       "type": "media",
       "multiple": false,
-      "required": true,
+      "required": false,
       "allowedTypes": [
         "images"
       ]
@@ -61,6 +62,11 @@
       "relation": "manyToOne",
       "target": "api::kategori.kategori",
       "inversedBy": "artikel_id"
+    },
+    "short_content": {
+      "type": "text",
+      "required": false,
+      "maxLength": 255
     }
   }
 }

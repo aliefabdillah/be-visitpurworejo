@@ -20,6 +20,11 @@
       "relation": "oneToMany",
       "target": "api::artikel.artikel",
       "mappedBy": "kategori_id"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name",
+      "required": true
     }
   }
 }
