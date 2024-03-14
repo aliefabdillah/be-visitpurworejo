@@ -4,7 +4,8 @@
   "info": {
     "singularName": "wisata",
     "pluralName": "wisatas",
-    "displayName": "Wisata"
+    "displayName": "Wisata",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -43,23 +44,23 @@
       "required": true
     },
     "img_cover": {
-      "allowedTypes": [
-        "images"
-      ],
       "type": "media",
       "multiple": false,
-      "required": true
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
     },
     "gallery": {
+      "type": "media",
+      "multiple": true,
+      "required": true,
       "allowedTypes": [
         "images",
         "videos"
-      ],
-      "type": "media",
-      "multiple": true,
-      "required": true
+      ]
     },
-    "wisata_favorites": {
+    "wisata_favorite_id": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::wisata-favorite.wisata-favorite",

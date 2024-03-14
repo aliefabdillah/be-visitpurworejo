@@ -1107,6 +1107,7 @@ export interface ApiWisataWisata extends Schema.CollectionType {
     singularName: 'wisata';
     pluralName: 'wisatas';
     displayName: 'Wisata';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -1123,7 +1124,7 @@ export interface ApiWisataWisata extends Schema.CollectionType {
     content: Attribute.Text & Attribute.Required;
     img_cover: Attribute.Media & Attribute.Required;
     gallery: Attribute.Media & Attribute.Required;
-    wisata_favorites: Attribute.Relation<
+    wisata_favorite_id: Attribute.Relation<
       'api::wisata.wisata',
       'oneToMany',
       'api::wisata-favorite.wisata-favorite'
@@ -1162,15 +1163,15 @@ export interface ApiWisataFavoriteWisataFavorite extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    wisata_id: Attribute.Relation<
-      'api::wisata-favorite.wisata-favorite',
-      'manyToOne',
-      'api::wisata.wisata'
-    >;
     user_id: Attribute.Relation<
       'api::wisata-favorite.wisata-favorite',
       'manyToOne',
       'plugin::users-permissions.user'
+    >;
+    wisata_id: Attribute.Relation<
+      'api::wisata-favorite.wisata-favorite',
+      'manyToOne',
+      'api::wisata.wisata'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;

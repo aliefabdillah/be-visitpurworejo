@@ -11,16 +11,16 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "wisata_id": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::wisata.wisata",
-      "inversedBy": "wisata_favorites"
-    },
     "user_id": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
+      "inversedBy": "wisata_favorite_id"
+    },
+    "wisata_id": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::wisata.wisata",
       "inversedBy": "wisata_favorite_id"
     }
   }
