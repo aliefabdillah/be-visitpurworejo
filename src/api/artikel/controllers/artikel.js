@@ -102,9 +102,16 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
           select: ['id', 'title', 'slug', 'content'],
           populate: ['img_cover'], 
           where: {
-            ['kategori_id']: { 
-              slug: {$eqi: category}
-            }
+            $and: [
+              {
+                ['kategori_id']: { 
+                  slug: {$eqi: category}
+                }
+              },
+              {
+                status: 'published'
+              }
+            ]
           },
           offset: offset,
           limit: limit
@@ -174,9 +181,16 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
           img_cover: true,
         },
         where: {
-          ['kategori_id']: {
-            name: { $eq: 'Pengalaman Wisata'}
-          }
+          $and: [
+            {
+              ['kategori_id']: {
+                name: { $eq: 'Pengalaman Wisata'}
+              }
+            },
+            {
+              status: 'published'
+            }
+          ]
         }
       });
 
