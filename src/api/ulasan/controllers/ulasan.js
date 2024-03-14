@@ -43,6 +43,119 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
     }
   },
 
+  async delete(ctx) {
+    // @ts-ignore
+    const ulasanId = ctx.request.params.id
+    const user = ctx.state.user;
+    let userPoint = parseInt(user.point);
+
+    if (ulasanId === ':id') {
+      return ctx.notFound('issue report not found!')
+    }
+
+    try {
+      await strapi.entityService.delete('api::ulasan.ulasan', ulasanId)
+      .then((res) => {
+        ctx.response.status = 200
+        ctx.response.message = 'OK'
+        ctx.response.body = {
+          message: 'Success delete',
+          data: res
+        }
+      })
+
+      //decrese point
+      await strapi.entityService.update('plugin::users-permissions.user', user.id, {
+        data: {
+          point: --userPoint
+        }
+      })
+
+    } catch (error) {
+      console.error(error);
+      ctx.badRequest("Failed to Delete");
+    }
+  },
+
+  async getTotalUlasanWisata(ctx){
+    // @ts-ignore
+    const slug = ctx.request.params.slug
+
+    try {
+      const resultData = await strapi.db.query('api::ulasan.ulasan').count({
+        where: {
+          ['post_wisata_id']: {
+            slug: { $eq : slug}
+          }
+        }
+      });
+
+      ctx.send({ data: resultData })
+
+    } catch (error) {
+      console.error(error);
+      ctx.badRequest("Failed to Get Ulasan");
+    }
+  },
+
+  async getUlasanByWisata(ctx){
+    // @ts-ignore
+    const slug = ctx.request.params.slug
+    const { category } = ctx.request.query
+
+    let sortFilter
+    if (category === 'Best' || category === '') {
+      sortFilter = { like : 'desc' }
+    }
+    if (category === 'Newest') {
+      sortFilter = { posting_date : 'desc' }
+    }
+    if (category === 'Oldest') {
+      sortFilter = { posting_date : 'asc' }
+    }
+
+    try {
+      const resultData = await strapi.db.query('api::ulasan.ulasan').findMany({
+        select: ['id', 'content', 'like', 'dislike', 'posting_date'],
+        orderBy: sortFilter,
+        populate: {
+          user_id: {
+            select: ['id', 'username'],
+            populate: {
+              img_profile: true
+            }
+          },
+          child_comment_id: {
+            select: ['id', 'content', 'like', 'dislike', 'posting_date'],
+            populate: {
+              user_id: {
+                select: ['id', 'username'],
+                populate: {
+                  img_profile: true
+                }
+              },
+            }
+          }
+        }
+      });
+
+      if (resultData) {
+        ctx.send({ data: resultData });
+      } else {
+        ctx.send({
+          data: {
+            code: 401,
+            message: "Ulasan Not Found"
+          }
+        })
+      }
+
+    } catch (error) {
+      console.error(error);
+      ctx.badRequest("Failed to Get Ulasan");
+    }
+  },
+
   async getReviewWisata(ctx) {
     const { jenis_wisata } = ctx.request.query
 

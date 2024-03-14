@@ -13,5 +13,23 @@ module.exports = {
         middlewares: [],
       },
     },
+    {
+      method: 'GET',
+      path: '/total-ulasan/:slug',
+      handler: 'ulasan.getTotalUlasanWisata',
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: 'GET',
+      path: '/ulasan-wisata/:slug',
+      handler: 'ulasan.getUlasanByWisata',
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
   ]
 }
