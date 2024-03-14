@@ -8,6 +8,44 @@ const { createCoreController } = require('@strapi/strapi').factories;
 
 // @ts-ignore
 module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
+  //get detail custom
+  async getDetailArtikel(ctx) {
+    // @ts-ignore
+    const slug = ctx.request.params.slug;
+
+    try {
+      const resultData = await strapi.db.query('api::artikel.artikel').findOne({
+        select: ['id', 'title', 'slug', 'short_content', 'publish_date', 'content'], 
+        where: { slug: slug },
+        populate: {
+          img_cover: true,
+          user_id: {
+            select: ['id', 'username'],
+            populate: { img_profile: true} 
+          },
+        }
+      });
+
+      // response body
+      if (resultData) {
+        ctx.send({ 
+          data: resultData,  
+        })
+      }else {
+        ctx.send({
+          data: {
+            code: 401,
+            message: "Articles Not Found"
+          }
+        })
+      }
+
+    } catch (error) {
+      console.error(error);
+      ctx.badRequest('Error get Articles');
+    }
+  },
+
   // show artikel in hero section
   async getHeroArtikel(ctx){
     try {

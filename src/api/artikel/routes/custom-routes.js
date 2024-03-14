@@ -29,5 +29,14 @@ module.exports = {
         middlewares: [],
       },
     },
+    {
+      method: 'GET',
+      path: '/artikels/detail/:slug',
+      handler: 'artikel.getDetailArtikel',
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
   ]
 }
