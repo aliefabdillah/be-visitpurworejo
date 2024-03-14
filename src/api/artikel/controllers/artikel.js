@@ -8,6 +8,35 @@ const { createCoreController } = require('@strapi/strapi').factories;
 
 // @ts-ignore
 module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
+  // custom create
+  async create(ctx){
+    // @ts-ignore
+    const body = ctx.request.body
+    const user = ctx.state.user;
+    const currentDate = new Date()
+
+    try {
+      const resultData = await strapi.entityService.create('api::artikel.artikel', {
+        data: {
+          title: body.data.title,
+          slug: body.data.slug,
+          user_id: user.id,
+          publishedAt: currentDate
+        }
+      })
+
+      if (resultData) {
+        ctx.send({ 
+          message: 'Successfully created',
+          data: resultData
+        })
+      }
+    } catch (error) {
+      console.error(error);
+      ctx.badRequest(error);
+    }
+  },
+
   //get detail custom
   async getDetailArtikel(ctx) {
     // @ts-ignore
