@@ -67,8 +67,12 @@ module.exports = (plugin) => {
         throw new ApplicationError('Your account email is not confirmed');
       }
 
+      if (user.isActive === false) {
+        throw new ApplicationError('Your account has not active, please to activate it first', 'account is not active')
+      }
+
       if (user.blocked === true) {
-        throw new ApplicationError('Your account has been blocked by an administrator');
+        throw new ForbiddenError('Your account has been blocked by an administrator');
       }
 
       return ctx.send({
@@ -93,6 +97,10 @@ module.exports = (plugin) => {
     // Connect the user with the third-party provider.
     try {
       const user = await getService('providers').connect(provider, ctx.query);
+
+      if (user.isActive === false) {
+        throw new ApplicationError('Your account has not active, please to activate it first', 'account is not active')
+      }
 
       if (user.blocked) {
         throw new ForbiddenError('Your account has been blocked by an administrator');
