@@ -196,5 +196,54 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
       console.error(error);
       ctx.badRequest('Error get Review Wisata');
     }
-  }
+  },
+
+  async getUlasanAccount(ctx){
+    const user = ctx.state.user
+
+    try {
+      const ulasanData = await strapi.db.query('api::ulasan.ulasan').findMany({
+        select: ['id', 'content', 'posting_date'],
+        populate: {
+          user_id: {
+            select: ['id', 'username'],
+            populate: {
+              img_profile: true
+            }
+          },
+          child_comment_id: true,
+          post_wisata_id: {
+            select: ['id', 'name'],
+          }
+        },
+        where: {
+          $and: [
+            {
+              ['user_id']: {
+                id: user.id
+              }
+            },
+            {
+              isDeleted: false
+            }
+          ]
+        }
+      });
+
+      if (ulasanData.length > 0) {
+        ctx.send({ data: ulasanData })
+      } else {
+        ctx.send({
+          data: {
+            code: 401,
+            message: "Ulasan Not Found"
+          }
+        })
+      }
+    } catch (error) {
+      console.error(error);
+      ctx.badRequest('Error get Ulasan User');
+    }
+    
+  },
 }));

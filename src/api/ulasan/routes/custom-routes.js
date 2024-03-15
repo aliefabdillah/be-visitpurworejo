@@ -31,5 +31,14 @@ module.exports = {
         middlewares: [],
       },
     },
+    {
+      method: 'GET',
+      path: '/ulasan-account',
+      handler: 'ulasan.getUlasanAccount',
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
   ]
 }
