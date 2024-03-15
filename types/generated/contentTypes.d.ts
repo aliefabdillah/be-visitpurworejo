@@ -913,6 +913,39 @@ export interface ApiArtikelArtikel extends Schema.CollectionType {
   };
 }
 
+export interface ApiHadiahHadiah extends Schema.CollectionType {
+  collectionName: 'hadiahs';
+  info: {
+    singularName: 'hadiah';
+    pluralName: 'hadiahs';
+    displayName: 'Hadiah';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required;
+    description: Attribute.Text & Attribute.Required;
+    redeem_point: Attribute.BigInteger & Attribute.Required;
+    image: Attribute.Media;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::hadiah.hadiah',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::hadiah.hadiah',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiKategoriKategori extends Schema.CollectionType {
   collectionName: 'kategoris';
   info: {
@@ -1211,6 +1244,7 @@ declare module '@strapi/types' {
       'plugin::slugify.slug': PluginSlugifySlug;
       'plugin::i18n.locale': PluginI18NLocale;
       'api::artikel.artikel': ApiArtikelArtikel;
+      'api::hadiah.hadiah': ApiHadiahHadiah;
       'api::kategori.kategori': ApiKategoriKategori;
       'api::laporan-ulasan.laporan-ulasan': ApiLaporanUlasanLaporanUlasan;
       'api::like-dislike-ulasan.like-dislike-ulasan': ApiLikeDislikeUlasanLikeDislikeUlasan;
