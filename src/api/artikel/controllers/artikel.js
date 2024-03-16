@@ -21,7 +21,8 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
           title: body.data.title,
           slug: body.data.slug,
           user_id: user.id,
-          publishedAt: currentDate
+          publishedAt: currentDate,
+          status: 'draft'
         }
       })
 
@@ -234,6 +235,46 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
         })
       }
 
+    } catch (error) {
+      console.error(error);
+      ctx.badRequest('Error get cerita');
+    }
+  },
+
+  async editUserArtikel(ctx){
+    const userId = ctx.state.user.id
+    // @ts-ignore
+    const slugArtikel = ctx.request.params.slug
+    // @ts-ignore
+    const { data } = ctx.request.body
+    // @ts-ignore
+    const file = ctx.request.files['files.img_cover']
+    const parsedData = JSON.parse(data)
+    
+    try {
+      
+      const entry = await strapi.db.query('api::artikel.artikel').update({
+        data: parsedData,
+        where: {
+          slug: slugArtikel
+        }
+      })
+
+      console.log(entry.id)
+
+      await strapi.plugin("upload").services.upload.upload({
+        data: {
+          ref: "api::artikel.artikel",
+          refId: entry.id,
+          field: 'img_cover',
+        },
+        files: file
+      })
+
+      ctx.send({
+        message: 'Artikel Updated',
+        data: entry,
+      })
     } catch (error) {
       console.error(error);
       ctx.badRequest('Error get cerita');

@@ -38,5 +38,14 @@ module.exports = {
         middlewares: [],
       },
     },
+    {
+      method: 'PUT',
+      path: '/edit-artikels/:slug',
+      handler: 'artikel.editUserArtikel',
+      config: {
+        policies: [],
+        middlewares: [],
+      }
+    },
   ]
 }

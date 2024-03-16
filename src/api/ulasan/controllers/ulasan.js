@@ -54,8 +54,11 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
     }
 
     try {
-      await strapi.entityService.delete('api::ulasan.ulasan', ulasanId)
-      .then((res) => {
+      await strapi.entityService.update('api::ulasan.ulasan', ulasanId, {
+        data: {
+          isDeleted: true
+        }
+      }).then((res) => {
         ctx.response.status = 200
         ctx.response.message = 'OK'
         ctx.response.body = {
@@ -84,9 +87,17 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
     try {
       const resultData = await strapi.db.query('api::ulasan.ulasan').count({
         where: {
-          ['post_wisata_id']: {
-            slug: { $eq : slug}
-          }
+          $and: [
+            {
+              ['post_wisata_id']: {
+                slug: { $eq : slug}
+              },
+            },
+            {
+              isDeleted: false
+            }
+          ]
+          
         }
       });
 
@@ -176,9 +187,16 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
           },
         },
         where: {
-          ['post_wisata_id']: {
-            jenis_wisata: { $eq: jenis_wisata}
-          }
+          $and: [
+            {
+              ['post_wisata_id']: {
+                jenis_wisata: { $eq: jenis_wisata}
+              }
+            },
+            {
+              isDeleted: false
+            }
+          ]
         }
       })
 
