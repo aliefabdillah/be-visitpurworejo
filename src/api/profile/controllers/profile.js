@@ -138,5 +138,47 @@ module.exports = {
       console.error(error);
       ctx.badRequest(error);
     }
+  },
+
+  async editProfile(ctx){
+    const userAuthId = ctx.state.user.id
+    const profileId = ctx.request.params.id
+
+    if (userAuthId !== profileId) {
+      ctx.forbidden('Cannot edit profile')
+    }
+
+    try {
+      console.log(ctx.request.files)
+      const { data } = ctx.request.body
+      const file = ctx.request.files['files.img_profile']
+
+      const parsedData = JSON.parse(data)
+
+      const entry = await strapi.entityService.update('plugin::users-permissions.user', profileId, {
+        data: {
+          ...parsedData,
+        },
+      })
+
+      await strapi.plugin("upload").services.upload.upload({
+        data: {
+          ref: "plugin::users-permissions.user",
+          refId: profileId,
+          field: 'img_profile',
+          source: "users-permissions"
+        },
+        files: file
+      })
+
+      ctx.send({
+        message: 'Profile Updated',
+        data: entry,
+      })
+    } catch (error) {
+      console.error(error);
+      ctx.badRequest(error);
+    }
+    
   }
 };

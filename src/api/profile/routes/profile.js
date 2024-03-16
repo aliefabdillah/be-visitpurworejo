@@ -38,5 +38,14 @@ module.exports = {
         middlewares: [],
       },
     },
+    {
+      method: 'PUT',
+      path: '/edit-profile/:id',
+      handler: 'profile.editProfile',
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    }
   ]
 }
