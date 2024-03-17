@@ -69,7 +69,7 @@ module.exports = {
 
       // console.log(accountData);
 
-      if (accountData.length == 0){
+      if (accountData){
         ctx.notFound({
           data: {
             code: 401,
