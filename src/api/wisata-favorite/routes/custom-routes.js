@@ -11,5 +11,14 @@ module.exports = {
         middlewares: [],
       },
     },
+    {
+      method: 'DELETE',
+      path: '/delete-favorites',
+      handler: 'wisata-favorite.deleteFromFavorite',
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
   ]
 }
