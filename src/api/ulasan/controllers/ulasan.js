@@ -21,6 +21,7 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
           user_id: user.id,
           post_wisata_id: body.data.post_wisata_id,
           parent_comment_id: body.data.parent_comment_id,
+          replied_to_id: body.data.replied_to_id,
           posting_date: currentDate,
           publishedAt: currentDate
         }
