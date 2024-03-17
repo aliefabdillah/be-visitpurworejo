@@ -260,7 +260,7 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
         }
       })
 
-      console.log(entry.id)
+      // console.log(entry.id)
 
       await strapi.plugin("upload").services.upload.upload({
         data: {

@@ -67,7 +67,7 @@ module.exports = {
         }
       })
 
-      console.log(accountData);
+      // console.log(accountData);
 
       if (accountData.length == 0){
         ctx.notFound({
