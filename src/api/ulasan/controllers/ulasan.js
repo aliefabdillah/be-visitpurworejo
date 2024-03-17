@@ -165,10 +165,24 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
                   }
                 }
               },
+              like_dislike_ulasan_id: {
+                select: ['id', 'isLike', 'isDislike'],
+                populate: {
+                  user_id: {
+                    select: ['id', 'username'],
+                  }
+                }
+              }
             }
           },
-          
-          like_dislike_ulasan_id: true
+          like_dislike_ulasan_id: {
+            select: ['id', 'isLike', 'isDislike'],
+            populate: {
+              user_id: {
+                select: ['id', 'username'],
+              }
+            }
+          }
         }
       });
 
