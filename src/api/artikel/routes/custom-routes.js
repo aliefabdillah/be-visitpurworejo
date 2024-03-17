@@ -47,5 +47,14 @@ module.exports = {
         middlewares: [],
       }
     },
+    {
+      method: 'PUT',
+      path: '/ajukan-publikasi/:slug',
+      handler: 'artikel.ajukanPublikasiArtikel',
+      config: {
+        policies: [],
+        middlewares: [],
+      }
+    },
   ]
 }

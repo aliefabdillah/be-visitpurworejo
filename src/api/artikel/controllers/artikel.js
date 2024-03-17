@@ -279,5 +279,30 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
       console.error(error);
       ctx.badRequest('Error get cerita');
     }
-  }
+  },
+
+  async ajukanPublikasiArtikel(ctx){
+    const userId = ctx.state.user.id
+    // @ts-ignore
+    const slugArtikel = ctx.request.params.slug
+
+    try {
+      await strapi.db.query('api::artikel.artikel').update({
+        data: {
+          status: 'verification'
+        },
+        where: {
+          slug: slugArtikel
+        }
+      }).then((res) => {
+        ctx.send({
+          message: 'Ajukan Publikasi Artikel Successfully',
+          data: res,
+        })
+      })
+    } catch (error) {
+      console.error(error);
+      ctx.badRequest(error)
+    }
+  },
 }));
