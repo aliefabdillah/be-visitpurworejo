@@ -27,10 +27,6 @@
       "required": false,
       "unique": false
     },
-    "content": {
-      "type": "blocks",
-      "required": false
-    },
     "status": {
       "type": "enumeration",
       "enum": [
@@ -67,6 +63,14 @@
       "type": "text",
       "required": false,
       "maxLength": 255
+    },
+    "content": {
+      "type": "customField",
+      "options": {
+        "output": "HTML",
+        "preset": "standard"
+      },
+      "customField": "plugin::ckeditor.CKEditor"
     }
   }
 }

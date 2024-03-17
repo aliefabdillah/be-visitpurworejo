@@ -877,7 +877,6 @@ export interface ApiArtikelArtikel extends Schema.CollectionType {
     title: Attribute.String & Attribute.Required & Attribute.Unique;
     slug: Attribute.UID<'api::artikel.artikel', 'title'> & Attribute.Required;
     publish_date: Attribute.DateTime;
-    content: Attribute.Blocks;
     status: Attribute.Enumeration<['published', 'draft', 'verification']>;
     notes: Attribute.Text;
     img_cover: Attribute.Media;
@@ -895,6 +894,14 @@ export interface ApiArtikelArtikel extends Schema.CollectionType {
       Attribute.SetMinMaxLength<{
         maxLength: 255;
       }>;
+    content: Attribute.RichText &
+      Attribute.CustomField<
+        'plugin::ckeditor.CKEditor',
+        {
+          output: 'HTML';
+          preset: 'standard';
+        }
+      >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
