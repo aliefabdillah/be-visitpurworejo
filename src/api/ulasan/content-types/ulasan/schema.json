@@ -68,6 +68,18 @@
       "relation": "oneToMany",
       "target": "api::like-dislike-ulasan.like-dislike-ulasan",
       "mappedBy": "ulasan_id"
+    },
+    "replied_to_id": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::ulasan.ulasan",
+      "inversedBy": "reply_comment_id"
+    },
+    "reply_comment_id": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::ulasan.ulasan",
+      "mappedBy": "replied_to_id"
     }
   }
 }

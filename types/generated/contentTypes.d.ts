@@ -1116,6 +1116,16 @@ export interface ApiUlasanUlasan extends Schema.CollectionType {
       'oneToMany',
       'api::like-dislike-ulasan.like-dislike-ulasan'
     >;
+    replied_to_id: Attribute.Relation<
+      'api::ulasan.ulasan',
+      'manyToOne',
+      'api::ulasan.ulasan'
+    >;
+    reply_comment_id: Attribute.Relation<
+      'api::ulasan.ulasan',
+      'oneToMany',
+      'api::ulasan.ulasan'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

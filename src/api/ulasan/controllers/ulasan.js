@@ -129,6 +129,18 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
       const resultData = await strapi.db.query('api::ulasan.ulasan').findMany({
         select: ['id', 'content', 'like', 'dislike', 'posting_date'],
         orderBy: sortFilter,
+        where: {
+          $and:[
+            {
+              ['post_wisata_id']:{
+                slug: slug
+              }
+            },
+            {
+              parent_comment_id: null
+            }
+          ]
+        },
         populate: {
           user_id: {
             select: ['id', 'username'],
@@ -145,8 +157,18 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
                   img_profile: true
                 }
               },
+              replied_to_id:{
+                select: ['id'],
+                populate: {
+                  user_id: {
+                    select: ['id', 'username'],
+                  }
+                }
+              },
             }
-          }
+          },
+          
+          like_dislike_ulasan_id: true
         }
       });
 
