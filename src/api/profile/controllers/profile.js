@@ -149,11 +149,29 @@ module.exports = {
     }
 
     try {
-      console.log(ctx.request.files)
       const { data } = ctx.request.body
       const file = ctx.request.files['files.img_profile']
 
       const parsedData = JSON.parse(data)
+      
+      const editedData = await strapi.db.query('plugin::users-permissions.user').findOne({
+        select: ['id', 'email'],
+        where: {
+          id: profileId
+        }
+      })
+
+      if (editedData.email !== parsedData.email) {
+        const existedEmail = await strapi.db.query('plugin::users-permissions.user').findOne({
+          where: {
+            email: parsedData.email
+          }
+        })
+
+        if (existedEmail) { 
+          return ctx.badRequest('Email already exists')
+        }
+      }
 
       const entry = await strapi.entityService.update('plugin::users-permissions.user', profileId, {
         data: {
@@ -161,15 +179,17 @@ module.exports = {
         },
       })
 
-      await strapi.plugin("upload").services.upload.upload({
-        data: {
-          ref: "plugin::users-permissions.user",
-          refId: profileId,
-          field: 'img_profile',
-          source: "users-permissions"
-        },
-        files: file
-      })
+      if (file !== undefined) {
+        await strapi.plugin("upload").services.upload.upload({
+          data: {
+            ref: "plugin::users-permissions.user",
+            refId: profileId,
+            field: 'img_profile',
+            source: "users-permissions"
+          },
+          files: file
+        })
+      }
 
       ctx.send({
         message: 'Profile Updated',
