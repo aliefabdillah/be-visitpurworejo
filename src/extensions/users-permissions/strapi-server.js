@@ -57,7 +57,7 @@ module.exports = (plugin) => {
       );
 
       if (!validPassword) {
-        throw new ValidationError('Your password is not valid');
+        throw new ValidationError('Wrong password. Try again or click forgot password to reset it');
       }
 
       const advancedSettings = await store.get({key: 'advanced'});
