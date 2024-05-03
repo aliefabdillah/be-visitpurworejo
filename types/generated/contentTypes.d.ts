@@ -712,7 +712,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     password: Attribute.Password &
       Attribute.Private &
       Attribute.SetMinMaxLength<{
-        minLength: 6;
+        minLength: 8;
       }>;
     resetPasswordToken: Attribute.String & Attribute.Private;
     confirmationToken: Attribute.String & Attribute.Private;
