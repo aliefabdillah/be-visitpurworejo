@@ -39,5 +39,34 @@ module.exports = createCoreController('api::laporan-ulasan.laporan-ulasan', ({ s
       console.error(error);
       ctx.badRequest("Failed to Create");
     }
+  },
+
+  async find(ctx) {
+    // @ts-ignore
+
+    try {
+      const result = await strapi.entityService.findMany('api::laporan-ulasan.laporan-ulasan', {
+        populate: {
+          ulasan_id: {
+            populate: {
+              user_id: {
+                fields: ['id', 'username'],
+              },
+            }
+          },
+          reporter_id: true,
+        },
+        sort: { report_date: 'desc'}
+      });
+
+      ctx.send({
+        code: 200,
+        message: 'success',
+        data: result
+      });
+    } catch (error) {
+      console.error(error);
+      ctx.badRequest("Failed to fetch data");
+    }
   }
 }));
