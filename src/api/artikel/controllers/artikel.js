@@ -38,6 +38,45 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
     }
   },
 
+  async find(ctx){
+    const { status } = ctx.request.query
+
+    try {
+      var resultData
+      if (status) {
+        resultData = await strapi.entityService.findMany('api::artikel.artikel', {
+          populate: ['img_cover', 'kategori_id', 'user_id'],
+          filters: {
+            status: {
+              $contains: status === 'published' ? 'published' : status === 'draft' ? 'draft' : 'verification',
+            }
+          }
+        })
+      } else {
+        resultData = await strapi.entityService.findMany('api::artikel.artikel', {
+          populate: ['img_cover', 'kategori_id', 'user_id'],          
+        })
+      }
+
+      // response body
+      if (resultData) {
+        ctx.send({ 
+          data: resultData,
+        })
+      }else {
+        ctx.send({
+          data: {
+            code: 401,
+            message: "Articles Not Found"
+          }
+        })
+      }
+    } catch (error) {
+      console.error(error);
+      ctx.badRequest('Error get Articles');
+    }
+  },
+
   //get detail custom
   async getDetailArtikel(ctx) {
     // @ts-ignore
