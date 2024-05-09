@@ -40,8 +40,17 @@ module.exports = {
     },
     {
       method: 'PUT',
-      path: '/edit-artikels/:slug',
+      path: '/artikels/edit-artikels/:slug',
       handler: 'artikel.editUserArtikel',
+      config: {
+        policies: [],
+        middlewares: [],
+      }
+    },
+    {
+      method: 'PUT',
+      path: '/artikels/admin-edit/:id',
+      handler: 'artikel.editAdminArtikel',
       config: {
         policies: [],
         middlewares: [],
@@ -51,6 +60,15 @@ module.exports = {
       method: 'PUT',
       path: '/ajukan-publikasi/:slug',
       handler: 'artikel.ajukanPublikasiArtikel',
+      config: {
+        policies: [],
+        middlewares: [],
+      }
+    },
+    {
+      method: 'POST',
+      path: '/artikels/admin-upload',
+      handler: 'artikel.createArtikelAdmin',
       config: {
         policies: [],
         middlewares: [],

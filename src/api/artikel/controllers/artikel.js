@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use strict';
 
 /**
@@ -74,6 +75,90 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
     } catch (error) {
       console.error(error);
       ctx.badRequest('Error get Articles');
+    }
+  },
+
+  async delete(ctx){
+    try {
+      const artikelId = ctx.request.params.id
+
+      /* GET DELETED ITEM */
+      const deletedArtikel = await strapi.db.query('api::artikel.artikel').findOne({
+        where: {
+          id: artikelId
+        },
+        populate: {
+          img_cover: true,
+          user_id: true,
+          kategori_id: true
+        }
+      })
+
+      /* DELETE COVER IMAGE ON CLOUD */
+      if (deletedArtikel.img_cover) {
+        const imageEntry = await strapi.db.query('plugin::upload.file').delete({
+          where: { id: deletedArtikel.img_cover.id },
+        });
+
+        strapi.plugins.upload.services.upload.remove(imageEntry);
+      }
+
+      /* DELETE ARTIKEL ITEM */
+      await strapi.entityService.delete('api::artikel.artikel', artikelId).then(() => {
+        ctx.status = 200
+        ctx.message = 'OK'
+        ctx.body = {
+          message: 'Successfully delete Artikel item'
+        }
+      })
+    } catch (error) {
+      console.error(error);
+      ctx.badRequest('Failed to delete wisata!');
+    }
+  },
+
+  /* UPLOAD  ARTIKEL ADMIN CUSTOM */
+  async createArtikelAdmin(ctx){
+    const userId = ctx.state.user.id
+    const { data } = ctx.request.body
+    const file = ctx.request.files['files.img_cover']
+    console.log(file)
+    const parsedData = JSON.parse(data)
+    const currentDate = new Date()
+
+    try {
+      const resultData = await strapi.entityService.create('api::artikel.artikel', {
+        data: {
+          ...parsedData,
+          status: 'draft',
+          user_id: userId,
+          publishedAt: currentDate,
+        },
+        populate: {
+          img_cover: true,
+          user_id: true,
+          kategori_id: true
+        }
+      })
+
+      if (file !== undefined) {
+        await strapi.plugin("upload").services.upload.upload({
+          data: {
+            ref: "api::artikel.artikel",
+            refId: resultData.id,
+            field: 'img_cover',
+          },
+          files: file
+        })
+      }
+
+      ctx.send({
+        message: 'Successfully created Artikel',
+        data: resultData
+      })
+    } catch (error) {
+      console.error(error);
+      ctx.badRequest(error.message);
     }
   },
 
@@ -309,6 +394,67 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
         },
         files: file
       })
+
+      ctx.send({
+        message: 'Artikel Updated',
+        data: entry,
+      })
+    } catch (error) {
+      console.error(error);
+      ctx.badRequest('Error get cerita');
+    }
+  },
+  
+  async editAdminArtikel(ctx){
+    const userId = ctx.state.user.id
+    // @ts-ignore
+    const artikelId = ctx.request.params.id
+    // @ts-ignore
+    const { data } = ctx.request.body
+    // @ts-ignore
+    const file = ctx.request.files['files.img_cover']
+    const parsedData = JSON.parse(data)
+    const currentDate = new Date()
+
+    try {
+      const entry = await strapi.db.query('api::artikel.artikel').update({
+        data: {
+          ...parsedData,
+          updatedAt: currentDate
+        },
+        where: {
+          id: artikelId
+        },
+        populate: {
+          img_cover: true,
+          user_id: true,
+          kategori_id: true
+        }
+      })
+
+      // console.log(entry.id)
+
+      /* REPLACE IMAGE */
+      if (file !== undefined) {
+        if (entry.img_cover) {
+          /* delete image on cloude */
+          const imageEntry = await strapi.db.query('plugin::upload.file').delete({
+            where: { id: entry.img_cover.id},
+          })
+
+          strapi.plugins.upload.services.upload.remove(imageEntry)
+        }
+
+        await strapi.plugin("upload").services.upload.upload({
+          data: {
+            ref: "api::artikel.artikel",
+            refId: entry.id,
+            field: 'img_cover',
+          },
+          files: file
+        })
+      }
+
 
       ctx.send({
         message: 'Artikel Updated',
