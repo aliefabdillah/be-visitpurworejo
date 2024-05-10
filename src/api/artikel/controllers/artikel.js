@@ -467,14 +467,15 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
   },
 
   async ajukanPublikasiArtikel(ctx){
-    const userId = ctx.state.user.id
+    const currentDate = new Date()
     // @ts-ignore
     const slugArtikel = ctx.request.params.slug
 
     try {
       await strapi.db.query('api::artikel.artikel').update({
         data: {
-          status: 'verification'
+          status: 'verification',
+          updateAt: currentDate
         },
         where: {
           slug: slugArtikel
@@ -490,4 +491,60 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
       ctx.badRequest(error)
     }
   },
+
+  async revisiArtikel(ctx){
+    const { data } = ctx.request.body
+    const artikelId = ctx.request.params.id
+    if (!data) {
+      ctx.badRequest('Entry data not found');
+    }
+    const parsedData = JSON.parse(data)
+    const currentDate = new Date()
+
+    try {
+      await strapi.db.query('api::artikel.artikel').update({
+        data: {
+          ...parsedData,
+          status: 'draft',
+          updatedAt: currentDate,
+        },
+        where: {
+          id: artikelId,
+        }
+      }).then((res) => {
+        ctx.send({
+          message: 'Send Revisi Artikel Successfully',
+          data: res,
+        })
+      })
+    } catch (error) {
+      console.error(error.message);
+      ctx.badRequest('Failed To Send Revisi Artikel');
+    }
+  },
+
+  async publishArtikel(ctx){
+    const artikelId = ctx.request.params.id
+    const currentDate = new Date()
+
+    try {
+      await strapi.db.query('api::artikel.artikel').update({
+        data: {
+          status: 'published',
+          updatedAt: currentDate
+        },
+        where: {
+          id: artikelId
+        }
+      }).then((res) => {
+        ctx.send({
+          message: 'Publish Artikel Successful',
+          data: res,
+        })
+      })
+    } catch (error) {
+      console.error(error.message);
+      ctx.badRequest('Failed To Publish Artikel');
+    }
+  }
 }));

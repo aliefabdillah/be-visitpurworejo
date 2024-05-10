@@ -66,6 +66,24 @@ module.exports = {
       }
     },
     {
+      method: 'PUT',
+      path: '/artikels/publikasi/:id',
+      handler: 'artikel.publishArtikel',
+      config: {
+        policies: [],
+        middlewares: [],
+      }
+    },
+    {
+      method: 'PUT',
+      path: '/artikels/revisi/:id',
+      handler: 'artikel.revisiArtikel',
+      config: {
+        policies: [],
+        middlewares: [],
+      }
+    },
+    {
       method: 'POST',
       path: '/artikels/admin-upload',
       handler: 'artikel.createArtikelAdmin',
