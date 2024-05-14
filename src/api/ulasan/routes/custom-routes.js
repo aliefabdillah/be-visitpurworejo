@@ -6,7 +6,7 @@ module.exports = {
   routes: [
     {
       method: 'GET',
-      path: '/review-wisata',
+      path: '/ulasans/get/review-wisata',
       handler: 'ulasan.getReviewWisata',
       config: {
         policies: [],

@@ -213,7 +213,7 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
 
     try {
       const resultData = await strapi.db.query('api::ulasan.ulasan').findMany({
-        select: ['id', 'content'],
+        select: ['id', 'content', 'like'],
         limit: 5,
         populate: {
           user_id: {

@@ -13,7 +13,7 @@ module.exports = {
     },
     {
       method: 'DELETE',
-      path: '/delete-favorites',
+      path: '/wisata-favorites/delete/favorites',
       handler: 'wisata-favorite.deleteFromFavorite',
       config: {
         policies: [],

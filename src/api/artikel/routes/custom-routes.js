@@ -4,7 +4,7 @@ module.exports = {
   routes: [
     {
       method: 'GET',
-      path: '/hero-artikels',
+      path: '/artikels/get/hero-artikels',
       handler: 'artikel.getHeroArtikel',
       config: {
         policies: [],
@@ -13,7 +13,7 @@ module.exports = {
     },
     {
       method: 'GET',
-      path: '/artikels-by-category',
+      path: '/artikels/get/by-category',
       handler: 'artikel.getArtikelByCategory',
       config: {
         policies: [],
@@ -22,7 +22,7 @@ module.exports = {
     },
     {
       method: 'GET',
-      path: '/cerita-kami',
+      path: '/artikels/get/cerita-kami',
       handler: 'artikel.getCeritaKami',
       config: {
         policies: [],

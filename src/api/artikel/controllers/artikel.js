@@ -173,6 +173,7 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
         where: { slug: slug },
         populate: {
           img_cover: true,
+          kategori_id: true,
           user_id: {
             select: ['id', 'username'],
             populate: { img_profile: true} 
@@ -204,7 +205,6 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
   async getHeroArtikel(ctx){
     try {
       const data =  await strapi.db.query("api::artikel.artikel").findMany({
-        select: ['id', 'title', 'slug', 'short_content'],
         limit: 5,
         populate: {
           kategori_id: {
@@ -219,7 +219,7 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
           $and: [
             {
               ['kategori_id']: {
-                name: { $eq: 'Aktivitas Wisata'}
+                name: { $eq: 'Berita Terkini'}
               }
             },{
               ['user_id']: {
@@ -241,26 +241,33 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
 
   // show articles by category
   async getArtikelByCategory(ctx) {
-    const { category, page } = ctx.request.query
+    const { category, perPage, page, limit, search } = ctx.request.query
 
     // pagination
     const pageQuery = parseInt(page && page.toString()) || 1
-    const limit = 9
-    const offset = (pageQuery - 1) * limit
+    const limitPage = perPage || limit
+
+    let offset = null
+    if (search === "") {
+      offset = (pageQuery - 1) * perPage
+    }
   
     try {
       // get articles
       let resultData
-      if (category !== "") {
+      if (category !== "" || search !== "") {
         resultData = await strapi.db.query('api::artikel.artikel').findMany({
-          select: ['id', 'title', 'slug', 'content'],
-          populate: ['img_cover'], 
+          select: ['id', 'title', 'slug', 'short_content'],
+          populate: ['img_cover', 'kategori_id'], 
           where: {
             $and: [
               {
                 ['kategori_id']: { 
-                  slug: {$eqi: category}
+                  slug: {$containsi: category}
                 }
+              },
+              {
+                title: {$containsi: search}
               },
               {
                 status: 'published'
@@ -268,29 +275,38 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
             ]
           },
           offset: offset,
-          limit: limit
+          limit: limitPage,
         })
       } else {
         resultData = await strapi.db.query('api::artikel.artikel').findMany({
-          select: ['id', 'title', 'slug', 'content'],
+          select: ['id', 'title', 'slug', 'short_content'],
           populate: ['img_cover'],
           orderBy: { publishedAt: 'DESC'},
+          where: {
+            status: 'published'
+          },
           offset: offset,
-          limit: limit
+          limit: limitPage
         })
       }
 
-      // item count
       const totalCount = await strapi.db.query('api::artikel.artikel').count({
         where: {
-          ['kategori_id']: {
-            slug: { $eqi: category }
-          }
+          $and: [
+            {
+              ['kategori_id']: { 
+                slug: {$containsi: category}
+              }
+            },
+            {
+              status: 'published'
+            }
+          ]
         },
       });
-      
+
       // pagecount
-      const pageCount = Math.ceil(totalCount / limit);
+      const pageCount = Math.ceil(totalCount / perPage);
       
       // response body
       if (resultData) {
@@ -298,10 +314,10 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
           data: resultData, 
           meta: {
             pagination: {
-              totalCount: totalCount,
+              page: pageQuery,
+              pageSize: parseInt(perPage),
               pageCount: pageCount,
-              currentPage: pageQuery,
-              pageSize: limit
+              total: totalCount,
             }
           }, 
         })

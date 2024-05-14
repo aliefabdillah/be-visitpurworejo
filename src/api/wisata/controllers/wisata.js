@@ -213,5 +213,26 @@ module.exports = createCoreController('api::wisata.wisata', ({ strapi }) => ({
       console.error(error);
       ctx.badRequest('Failed to delete wisata!');
     }
-  }
+  },
+
+  async getWisataPopular(ctx){
+    try {
+      await strapi.db.query('api::wisata.wisata').findMany({
+        limit: 5,
+        populate: {
+          wisata_favorite_id: true,
+          img_cover: true,
+          gallery: true,
+        }
+      }).then((res) => {
+        ctx.send({
+          message: 'Get Popular Wisata Success',
+          data: res
+        })
+      })
+    } catch (error) {
+      console.error(error);
+      ctx.badRequest('Failed to get wisata!');
+    }
+  },  
 }));
