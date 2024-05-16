@@ -168,7 +168,7 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
 
     try {
       const resultData = await strapi.db.query('api::artikel.artikel').findOne({
-        select: ['id', 'title', 'slug', 'short_content', 'publish_date', 'content'], 
+        select: ['id', 'title', 'slug', 'short_content', 'publish_date', 'content', 'status'], 
         where: { slug: slug },
         populate: {
           img_cover: true,
@@ -383,46 +383,6 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
   async editUserArtikel(ctx){
     const userId = ctx.state.user.id
     // @ts-ignore
-    const slugArtikel = ctx.request.params.slug
-    // @ts-ignore
-    const { data } = ctx.request.body
-    // @ts-ignore
-    const file = ctx.request.files['files.img_cover']
-    const parsedData = JSON.parse(data)
-    
-    try {
-      
-      const entry = await strapi.db.query('api::artikel.artikel').update({
-        data: parsedData,
-        where: {
-          slug: slugArtikel
-        }
-      })
-
-      // console.log(entry.id)
-
-      await strapi.plugin("upload").services.upload.upload({
-        data: {
-          ref: "api::artikel.artikel",
-          refId: entry.id,
-          field: 'img_cover',
-        },
-        files: file
-      })
-
-      ctx.send({
-        message: 'Artikel Updated',
-        data: entry,
-      })
-    } catch (error) {
-      console.error(error);
-      ctx.badRequest('Error get cerita');
-    }
-  },
-  
-  async editAdminArtikel(ctx){
-    const userId = ctx.state.user.id
-    // @ts-ignore
     const artikelId = ctx.request.params.id
     // @ts-ignore
     const { data } = ctx.request.body
@@ -430,8 +390,28 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
     const file = ctx.request.files['files.img_cover']
     const parsedData = JSON.parse(data)
     const currentDate = new Date()
-
+    
     try {
+      
+      const editedData = await strapi.db.query('api::artikel.artikel').findOne({
+        select: ['id', 'title'],
+        where: {
+          id: artikelId
+        }
+      })
+
+      if (editedData.title !== parsedData.title) {
+        const existedTitle = await strapi.db.query('api::artikel.artikel').findOne({
+          where: {
+            title: parsedData.title
+          }
+        })
+
+        if (existedTitle) { 
+          return ctx.badRequest('Title already exists')
+        }
+      }
+
       const entry = await strapi.db.query('api::artikel.artikel').update({
         data: {
           ...parsedData,
@@ -447,7 +427,83 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
         }
       })
 
-      // console.log(entry.id)
+
+      if (file !== undefined) {
+        if (entry.img_cover) {
+          /* delete image on cloude */
+          const imageEntry = await strapi.db.query('plugin::upload.file').delete({
+            where: { id: entry.img_cover.id},
+          })
+
+          strapi.plugins.upload.services.upload.remove(imageEntry)
+        }
+
+        await strapi.plugin("upload").services.upload.upload({
+          data: {
+            ref: "api::artikel.artikel",
+            refId: entry.id,
+            field: 'img_cover',
+          },
+          files: file
+        })
+      }
+
+      ctx.send({
+        message: 'Artikel Updated',
+        data: entry,
+      })
+    } catch (error) {
+      console.error(error);
+      ctx.badRequest('Error update Artikel');
+    }
+  },
+  
+  async editAdminArtikel(ctx){
+    const userId = ctx.state.user.id
+    // @ts-ignore
+    const artikelId = ctx.request.params.id
+    // @ts-ignore
+    const { data } = ctx.request.body
+    // @ts-ignore
+    const file = ctx.request.files['files.img_cover']
+    const parsedData = JSON.parse(data)
+    const currentDate = new Date()
+
+    try {
+      const editedData = await strapi.db.query('api::artikel.artikel').findOne({
+        select: ['id', 'title'],
+        where: {
+          id: artikelId
+        }
+      })
+
+      if (editedData.title !== parsedData.title) {
+        const existedTitle = await strapi.db.query('api::artikel.artikel').findOne({
+          where: {
+            title: parsedData.title
+          }
+        })
+
+        if (existedTitle) { 
+          return ctx.badRequest('Title already exists')
+        }
+      }
+
+      const entry = await strapi.db.query('api::artikel.artikel').update({
+        data: {
+          ...parsedData,
+          updatedAt: currentDate
+        },
+        where: {
+          id: artikelId
+        },
+        populate: {
+          img_cover: true,
+          user_id: true,
+          kategori_id: true
+        }
+      })
+
 
       /* REPLACE IMAGE */
       if (file !== undefined) {

@@ -49,7 +49,7 @@ module.exports = {
     },
     {
       method: 'PUT',
-      path: '/artikels/edit-artikels/:slug',
+      path: '/artikels/edit-artikels/:id',
       handler: 'artikel.editUserArtikel',
       config: {
         policies: [],
@@ -67,7 +67,7 @@ module.exports = {
     },
     {
       method: 'PUT',
-      path: '/ajukan-publikasi/:slug',
+      path: '/artikels/ajukan-publikasi/:slug',
       handler: 'artikel.ajukanPublikasiArtikel',
       config: {
         policies: [],

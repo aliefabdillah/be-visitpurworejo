@@ -173,7 +173,6 @@ module.exports = {
         }
       }
 
-      console.log(editedData.username)
       // console.log(parsedData.username)
       if (editedData.username !== parsedData.username) {
         const existedUsername = await strapi.db.query('plugin::users-permissions.user').findOne({
@@ -217,9 +216,19 @@ module.exports = {
         })
       }
 
+      const newProfileData = await strapi.db.query('plugin::users-permissions.user').findOne({
+        select: ['*'],
+        populate: {
+          img_profile: true
+        },
+        where: {
+          id: profileId
+        }
+      })
+      console.log(newProfileData.img_profile)
       ctx.send({
         message: 'Profile Updated',
-        data: entry,
+        data: newProfileData,
       })
     } catch (error) {
       console.error(error);
