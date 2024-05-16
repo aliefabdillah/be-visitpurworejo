@@ -33,7 +33,7 @@ module.exports = {
     },
     {
       method: 'GET',
-      path: '/profile/ulasan-account',
+      path: '/ulasans/profile/ulasan-account',
       handler: 'ulasan.getUlasanAccount',
       config: {
         policies: [],

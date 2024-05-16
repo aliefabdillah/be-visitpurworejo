@@ -21,17 +21,30 @@ module.exports = createCoreController('api::hadiah.hadiah', ({ strapi }) => ({
       const hadiahData = await strapi.entityService.findOne('api::hadiah.hadiah', hadiahId)
       // console.log(hadiahData);
 
-      await strapi.entityService.update('plugin::users-permissions.user', user.id, {
-        data: {
-          point: userPoint - parseInt(hadiahData.redeem_point)
-        }
-      }).then(() => {
-        ctx.status = 200;
-        ctx.message = 'OK'
+      if (userPoint < parseInt(hadiahData.redeem_point)) {
+        ctx.status = 400
+        ctx.message = 'BAD REQUEST'
         ctx.body = {
-          message: 'Successfully Redeem Point'
+          error: {
+            status: 400,
+            name: 'Bad Request',
+            message: 'Insufficient points!'
+          }
         }
-      })
+      } else {
+        await strapi.entityService.update('plugin::users-permissions.user', user.id, {
+          data: {
+            point: userPoint - parseInt(hadiahData.redeem_point)
+          }
+        }).then(() => {
+          ctx.status = 200;
+          ctx.message = 'OK'
+          ctx.body = {
+            message: 'Successfully Redeem Point'
+          }
+        })
+      }
+
     } catch (error) {
       console.error(error);
       ctx.badRequest(error);

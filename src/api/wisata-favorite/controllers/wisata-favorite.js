@@ -73,19 +73,32 @@ module.exports = createCoreController('api::wisata-favorite.wisata-favorite', ({
         }
       });
 
-      await Promise.all(
-        toDelete.map(({ id }) =>
-          strapi.db.query("api::wisata-favorite.wisata-favorite").delete({
-            where: { id },
-          })
-        )
-      ).then((res)  => {
-        ctx.status = 200;
-        ctx.message = 'OK';
+      if (toDelete.length > 0) {
+        console.log(toDelete)
+        await Promise.all(
+          toDelete.map(({ id }) =>
+            strapi.db.query("api::wisata-favorite.wisata-favorite").delete({
+              where: { id },
+            })
+          )
+        ).then((res)  => {
+          ctx.status = 200;
+          ctx.message = 'OK';
+          ctx.body = {
+            message: 'Successfully deleted all favorites'
+          }
+        });
+      } else {
+        ctx.status = 401
+        ctx.message = 'NOT FOUND'
         ctx.body = {
-          message: 'Successfully deleted all favorites'
+          error: {
+            status: 400,
+            name: 'Not Found',
+            message: 'All Favorite wisata already deleted'
+          }
         }
-      });
+      }
     } catch (error) {
       console.error(error);
       ctx.badRequest('Failed To Delete Favorite');

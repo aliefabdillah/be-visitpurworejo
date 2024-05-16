@@ -155,7 +155,7 @@ module.exports = {
       const parsedData = JSON.parse(data)
       
       const editedData = await strapi.db.query('plugin::users-permissions.user').findOne({
-        select: ['id', 'email'],
+        select: ['id', 'email', 'username'],
         where: {
           id: profileId
         }
@@ -173,13 +173,39 @@ module.exports = {
         }
       }
 
+      console.log(editedData.username)
+      // console.log(parsedData.username)
+      if (editedData.username !== parsedData.username) {
+        const existedUsername = await strapi.db.query('plugin::users-permissions.user').findOne({
+          where: {
+            username: parsedData.username
+          }
+        })
+
+        if (existedUsername) { 
+          return ctx.badRequest('Username already exists')
+        }
+      }
+
       const entry = await strapi.entityService.update('plugin::users-permissions.user', profileId, {
         data: {
           ...parsedData,
         },
+        populate: {
+          img_profile: true
+        }
       })
 
       if (file !== undefined) {
+        if (entry.img_profile) {
+          /* delete image on cloud */
+          const imageEntry = await strapi.db.query('plugin::upload.file').delete({
+            where: { id: entry.img_profile.id},
+          })
+
+          strapi.plugins.upload.services.upload.remove(imageEntry)
+        }
+
         await strapi.plugin("upload").services.upload.upload({
           data: {
             ref: "plugin::users-permissions.user",

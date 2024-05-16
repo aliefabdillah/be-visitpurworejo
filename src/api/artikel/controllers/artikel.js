@@ -14,13 +14,13 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
     // @ts-ignore
     const body = ctx.request.body
     const user = ctx.state.user;
+    const parsedBody = JSON.parse(body.data)
     const currentDate = new Date()
 
     try {
       const resultData = await strapi.entityService.create('api::artikel.artikel', {
         data: {
-          title: body.data.title,
-          slug: body.data.slug,
+          ...parsedBody,
           user_id: user.id,
           publishedAt: currentDate,
           status: 'draft'
@@ -34,8 +34,8 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
         })
       }
     } catch (error) {
-      console.error(error);
-      ctx.badRequest(error);
+      console.error(error.details);
+      ctx.badRequest(error.details);
     }
   },
 
@@ -122,7 +122,6 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
     const userId = ctx.state.user.id
     const { data } = ctx.request.body
     const file = ctx.request.files['files.img_cover']
-    console.log(file)
     const parsedData = JSON.parse(data)
     const currentDate = new Date()
 
@@ -561,6 +560,40 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
     } catch (error) {
       console.error(error.message);
       ctx.badRequest('Failed To Publish Artikel');
+    }
+  },
+
+  async getArtikelAccount(ctx) {
+    const { status } = ctx.request.query
+    const userId = ctx.state.user.id
+    
+    try {
+      const resultData = await strapi.db.query('api::artikel.artikel').findMany({
+        select: ['id', 'title', 'slug', 'short_content'],
+        populate: ['img_cover', 'user_id'], 
+        where: {
+          $and: [
+            {
+              ['user_id']: { 
+                id: {$eq: userId}
+              }
+            },
+            {
+              status: status
+            }
+          ]
+        },
+      })
+
+      if (resultData) {
+        ctx.send({
+          message: "Success Get Artikel Account",
+          data: resultData
+        })
+      }
+    } catch (error) {
+      console.error(error);
+      ctx.badRequest('Error get Articles');
     }
   }
 }));

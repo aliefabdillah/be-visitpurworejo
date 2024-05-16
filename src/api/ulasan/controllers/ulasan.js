@@ -268,7 +268,7 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
           },
           child_comment_id: true,
           post_wisata_id: {
-            select: ['id', 'name'],
+            select: ['id', 'name', 'slug', 'jenis_wisata'],  
           }
         },
         where: {
@@ -282,7 +282,8 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
               isDeleted: false
             }
           ]
-        }
+        },
+        orderBy: {posting_date: 'desc'}
       });
 
       if (ulasanData.length > 0) {

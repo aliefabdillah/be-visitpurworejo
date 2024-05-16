@@ -4,7 +4,7 @@ module.exports = {
   routes: [
     {
       method: 'DELETE',
-      path: '/profile/wisata-favorites/all',
+      path: '/wisata-favorites/delete/all',
       handler: 'wisata-favorite.deleteAllFavorite',
       config: {
         policies: [],

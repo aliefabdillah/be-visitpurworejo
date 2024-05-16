@@ -40,7 +40,7 @@ module.exports = {
     },
     {
       method: 'PUT',
-      path: '/edit-profile/:id',
+      path: '/profiles/edit-profile/:id',
       handler: 'profile.editProfile',
       config: {
         policies: [],

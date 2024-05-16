@@ -4,7 +4,7 @@ module.exports = {
   routes: [
     {
       method: 'GET',
-      path: '/profile/redeem-point/:id',
+      path: '/hadiahs/redeem-point/:id',
       handler: 'hadiah.redeemPoint',
       config: {
         policies: [],

@@ -39,6 +39,15 @@ module.exports = {
       },
     },
     {
+      method: 'GET',
+      path: '/artikels/get/artikel-account',
+      handler: 'artikel.getArtikelAccount',
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
       method: 'PUT',
       path: '/artikels/edit-artikels/:slug',
       handler: 'artikel.editUserArtikel',
