@@ -15,7 +15,7 @@ module.exports = {
     },
     {
       method: 'GET',
-      path: '/total-ulasan/:slug',
+      path: '/ulasans/total-ulasan/:slug',
       handler: 'ulasan.getTotalUlasanWisata',
       config: {
         policies: [],
@@ -24,7 +24,7 @@ module.exports = {
     },
     {
       method: 'GET',
-      path: '/ulasan-wisata/:slug',
+      path: '/ulasans/ulasan-wisata/:slug',
       handler: 'ulasan.getUlasanByWisata',
       config: {
         policies: [],

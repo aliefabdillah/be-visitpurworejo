@@ -9,7 +9,8 @@ const { createCoreController } = require('@strapi/strapi').factories;
 module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
   async create(ctx) {
     // @ts-ignore
-    const body = ctx.request.body;
+    const { data } = ctx.request.body
+    const parsedData = JSON.parse(data)
     const user = ctx.state.user;
     let userPoint = parseInt(user.point)
     const currentDate = new Date()
@@ -17,11 +18,8 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
     try {
       const result = await strapi.entityService.create('api::ulasan.ulasan', {
         data: {
-          content: body.data.content,
+          ...parsedData,
           user_id: user.id,
-          post_wisata_id: body.data.post_wisata_id,
-          parent_comment_id: body.data.parent_comment_id,
-          replied_to_id: body.data.replied_to_id,
           posting_date: currentDate,
           publishedAt: currentDate
         }
@@ -128,7 +126,7 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
 
     try {
       const resultData = await strapi.db.query('api::ulasan.ulasan').findMany({
-        select: ['id', 'content', 'like', 'dislike', 'posting_date'],
+        select: ['id', 'content', 'like', 'dislike', 'posting_date', 'isDeleted'],
         orderBy: sortFilter,
         where: {
           $and:[
@@ -143,6 +141,9 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
           ]
         },
         populate: {
+          post_wisata_id: {
+            select: ['id', 'name'],
+          },
           user_id: {
             select: ['id', 'username'],
             populate: {
@@ -150,8 +151,11 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
             }
           },
           child_comment_id: {
-            select: ['id', 'content', 'like', 'dislike', 'posting_date'],
+            select: ['id', 'content', 'like', 'dislike', 'posting_date', 'isDeleted'],
             populate: {
+              post_wisata_id: {
+                select: ['id', 'name'],
+              },
               user_id: {
                 select: ['id', 'username'],
                 populate: {
