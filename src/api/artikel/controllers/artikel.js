@@ -606,11 +606,23 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
         },
         where: {
           id: artikelId
+        },
+        populate: {
+          user_id: true,
         }
-      }).then((res) => {
-        ctx.send({
-          message: 'Publish Artikel Successful',
-          data: res,
+      }).then(async (res) => {
+        await strapi.db.query('plugin::users-permissions.user').update({
+          data: {
+            point: parseInt(res.user_id.point) + 10
+          },
+          where: {
+            id: res.user_id.id
+          }
+        }).then((res) => {
+          ctx.send({
+            message: 'Publish Artikel Successful',
+            data: res,
+          })
         })
       })
     } catch (error) {

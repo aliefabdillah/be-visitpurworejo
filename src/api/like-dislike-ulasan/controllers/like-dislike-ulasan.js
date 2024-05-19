@@ -62,7 +62,18 @@ module.exports = createCoreController('api::like-dislike-ulasan.like-dislike-ula
           isLike: data.isLike,
           isDislike: data.isDislike
         }
-      }).then((res) => {
+      }).then(async (res) => {
+        if (!res.isLike && !res.isDislike) {
+          await strapi.db.query('api::like-dislike-ulasan.like-dislike-ulasan').delete({
+            where: {
+              id: res.id,
+            }
+          }).then((res) => {
+            ctx.send({
+              message: 'success update and delete',
+            })
+          })
+        }
         ctx.send({
           message: 'success update',
           data: res
