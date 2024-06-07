@@ -926,6 +926,7 @@ export interface ApiHadiahHadiah extends Schema.CollectionType {
     singularName: 'hadiah';
     pluralName: 'hadiahs';
     displayName: 'Hadiah';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -935,6 +936,7 @@ export interface ApiHadiahHadiah extends Schema.CollectionType {
     description: Attribute.Text & Attribute.Required;
     redeem_point: Attribute.BigInteger & Attribute.Required;
     image: Attribute.Media;
+    stock: Attribute.BigInteger & Attribute.Required & Attribute.DefaultTo<'0'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
