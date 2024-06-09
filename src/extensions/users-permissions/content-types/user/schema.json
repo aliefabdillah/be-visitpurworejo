@@ -126,6 +126,12 @@
       "relation": "oneToMany",
       "target": "api::like-dislike-ulasan.like-dislike-ulasan",
       "mappedBy": "user_id"
+    },
+    "tiket_id": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::tiket.tiket",
+      "mappedBy": "user_id"
     }
   }
 }

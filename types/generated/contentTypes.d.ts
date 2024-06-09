@@ -759,6 +759,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::like-dislike-ulasan.like-dislike-ulasan'
     >;
+    tiket_id: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::tiket.tiket'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1078,6 +1083,55 @@ export interface ApiLikeDislikeUlasanLikeDislikeUlasan
   };
 }
 
+export interface ApiTiketTiket extends Schema.CollectionType {
+  collectionName: 'tikets';
+  info: {
+    singularName: 'tiket';
+    pluralName: 'tikets';
+    displayName: 'Tiket';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required;
+    email: Attribute.String & Attribute.Required;
+    wisata_id: Attribute.Relation<
+      'api::tiket.tiket',
+      'manyToOne',
+      'api::wisata.wisata'
+    >;
+    user_id: Attribute.Relation<
+      'api::tiket.tiket',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    total_pembayaran: Attribute.BigInteger &
+      Attribute.Required &
+      Attribute.DefaultTo<'0'>;
+    order_id: Attribute.UID & Attribute.Required;
+    quantity: Attribute.BigInteger &
+      Attribute.Required &
+      Attribute.DefaultTo<'0'>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::tiket.tiket',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::tiket.tiket',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiUlasanUlasan extends Schema.CollectionType {
   collectionName: 'ulasans';
   info: {
@@ -1186,6 +1240,15 @@ export interface ApiWisataWisata extends Schema.CollectionType {
       'oneToMany',
       'api::ulasan.ulasan'
     >;
+    map_link: Attribute.String;
+    tiket_id: Attribute.Relation<
+      'api::wisata.wisata',
+      'oneToMany',
+      'api::tiket.tiket'
+    >;
+    tiket: Attribute.BigInteger &
+      Attribute.Required &
+      Attribute.DefaultTo<'5000'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1267,6 +1330,7 @@ declare module '@strapi/types' {
       'api::kategori.kategori': ApiKategoriKategori;
       'api::laporan-ulasan.laporan-ulasan': ApiLaporanUlasanLaporanUlasan;
       'api::like-dislike-ulasan.like-dislike-ulasan': ApiLikeDislikeUlasanLikeDislikeUlasan;
+      'api::tiket.tiket': ApiTiketTiket;
       'api::ulasan.ulasan': ApiUlasanUlasan;
       'api::wisata.wisata': ApiWisataWisata;
       'api::wisata-favorite.wisata-favorite': ApiWisataFavoriteWisataFavorite;

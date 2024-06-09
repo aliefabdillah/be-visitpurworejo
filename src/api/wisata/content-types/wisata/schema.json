@@ -71,6 +71,21 @@
       "relation": "oneToMany",
       "target": "api::ulasan.ulasan",
       "mappedBy": "post_wisata_id"
+    },
+    "map_link": {
+      "type": "string",
+      "required": false
+    },
+    "tiket_id": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::tiket.tiket",
+      "mappedBy": "wisata_id"
+    },
+    "tiket": {
+      "type": "biginteger",
+      "default": "5000",
+      "required": true
     }
   }
 }
