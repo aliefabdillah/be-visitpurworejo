@@ -1246,9 +1246,7 @@ export interface ApiWisataWisata extends Schema.CollectionType {
       'oneToMany',
       'api::tiket.tiket'
     >;
-    tiket: Attribute.BigInteger &
-      Attribute.Required &
-      Attribute.DefaultTo<'5000'>;
+    tiket: Attribute.BigInteger & Attribute.DefaultTo<'5000'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

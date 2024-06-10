@@ -85,7 +85,7 @@
     "tiket": {
       "type": "biginteger",
       "default": "5000",
-      "required": true
+      "required": false
     }
   }
 }
