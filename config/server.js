@@ -4,7 +4,7 @@ module.exports = ({ env }) => ({
   app: {
     keys: env.array('APP_KEYS'),
   },
-  url: env('PUBLIC_URL', 'https://be-visitpurworejo.vercel.app/'),
+  url: env('PUBLIC_URL', 'https://visitpurworejo-api.vercel.app/'),
   webhooks: {
     populateRelations: env.bool('WEBHOOKS_POPULATE_RELATIONS', false),
   },
