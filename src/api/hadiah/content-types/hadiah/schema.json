@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "hadiahs",
+  "info": {
+    "singularName": "hadiah",
+    "pluralName": "hadiahs",
+    "displayName": "Hadiah",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "redeem_point": {
+      "type": "biginteger",
+      "required": true
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "stock": {
+      "type": "biginteger",
+      "default": "0",
+      "required": true
+    }
+  }
+}

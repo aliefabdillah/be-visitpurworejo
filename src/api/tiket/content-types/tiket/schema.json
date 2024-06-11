@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tikets",
+  "info": {
+    "singularName": "tiket",
+    "pluralName": "tikets",
+    "displayName": "Tiket",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "string",
+      "required": true
+    },
+    "wisata_id": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::wisata.wisata",
+      "inversedBy": "tiket_id"
+    },
+    "user_id": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "tiket_id"
+    },
+    "total_pembayaran": {
+      "type": "biginteger",
+      "required": true,
+      "default": "0"
+    },
+    "order_id": {
+      "type": "uid",
+      "required": true
+    },
+    "quantity": {
+      "type": "biginteger",
+      "default": "0",
+      "required": true
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "wisata_favorites",
+  "info": {
+    "singularName": "wisata-favorite",
+    "pluralName": "wisata-favorites",
+    "displayName": "WisataFavorite"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user_id": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "wisata_favorite_id"
+    },
+    "wisata_id": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::wisata.wisata",
+      "inversedBy": "wisata_favorite_id"
+    }
+  }
+}

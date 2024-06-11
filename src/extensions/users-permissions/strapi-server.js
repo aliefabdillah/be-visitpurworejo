@@ -57,7 +57,7 @@ module.exports = (plugin) => {
       );
 
       if (!validPassword) {
-        throw new ValidationError('Your password is not valid');
+        throw new ValidationError('Wrong password. Try again or click forgot password to reset it');
       }
 
       const advancedSettings = await store.get({key: 'advanced'});
@@ -67,8 +67,12 @@ module.exports = (plugin) => {
         throw new ApplicationError('Your account email is not confirmed');
       }
 
+      if (user.isActive === false) {
+        throw new ApplicationError('Your account has not active, please to activate it first', 'account is not active')
+      }
+
       if (user.blocked === true) {
-        throw new ApplicationError('Your account has been blocked by an administrator');
+        throw new ForbiddenError('Your account has been blocked by an administrator');
       }
 
       return ctx.send({
@@ -83,7 +87,7 @@ module.exports = (plugin) => {
           isAdmin: user.isAdmin,
           isActive: user.isActive,
           point: parseInt(user.point),
-          asal_daerah: user.asal_daerah,
+          hometown: user.hometown,
           fullname: user.fullname,
           img_profile: user.img_profile
         }
@@ -93,6 +97,10 @@ module.exports = (plugin) => {
     // Connect the user with the third-party provider.
     try {
       const user = await getService('providers').connect(provider, ctx.query);
+
+      if (user.isActive === false) {
+        throw new ApplicationError('Your account has not active, please to activate it first', 'account is not active')
+      }
 
       if (user.blocked) {
         throw new ForbiddenError('Your account has been blocked by an administrator');
@@ -110,7 +118,7 @@ module.exports = (plugin) => {
           isAdmin: user.isAdmin,
           isActive: user.isActive,
           point: parseInt(user.point),
-          asal_daerah: user.asal_daerah,
+          hometown: user.hometown,
           fullname: user.fullname,
           img_profile: user.img_profile
         }

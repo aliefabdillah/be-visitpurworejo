@@ -31,7 +31,7 @@
     },
     "password": {
       "type": "password",
-      "minLength": 6,
+      "minLength": 8,
       "configurable": false,
       "private": true,
       "searchable": false
@@ -86,7 +86,7 @@
         "images"
       ]
     },
-    "asal_daerah": {
+    "hometown": {
       "type": "string"
     },
     "phone": {
@@ -96,6 +96,42 @@
     },
     "fullname": {
       "type": "string"
+    },
+    "artikel_id": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::artikel.artikel",
+      "mappedBy": "user_id"
+    },
+    "wisata_favorite_id": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::wisata-favorite.wisata-favorite",
+      "mappedBy": "user_id"
+    },
+    "ulasan_id": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::ulasan.ulasan",
+      "mappedBy": "user_id"
+    },
+    "laporan_ulasan_ids": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::laporan-ulasan.laporan-ulasan",
+      "mappedBy": "reporter_id"
+    },
+    "like_dislike_ulasans": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::like-dislike-ulasan.like-dislike-ulasan",
+      "mappedBy": "user_id"
+    },
+    "tiket_id": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::tiket.tiket",
+      "mappedBy": "user_id"
     }
   }
 }
