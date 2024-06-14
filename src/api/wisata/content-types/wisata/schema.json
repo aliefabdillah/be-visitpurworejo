@@ -39,10 +39,6 @@
       "type": "string",
       "required": true
     },
-    "content": {
-      "type": "text",
-      "required": true
-    },
     "img_cover": {
       "type": "media",
       "multiple": false,
@@ -86,6 +82,14 @@
       "type": "biginteger",
       "default": "5000",
       "required": false
+    },
+    "content": {
+      "type": "customField",
+      "options": {
+        "output": "HTML",
+        "preset": "standard"
+      },
+      "customField": "plugin::ckeditor.CKEditor"
     }
   }
 }

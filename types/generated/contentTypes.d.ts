@@ -1227,7 +1227,6 @@ export interface ApiWisataWisata extends Schema.CollectionType {
     > &
       Attribute.Required;
     short_content: Attribute.String & Attribute.Required;
-    content: Attribute.Text & Attribute.Required;
     img_cover: Attribute.Media & Attribute.Required;
     gallery: Attribute.Media & Attribute.Required;
     wisata_favorite_id: Attribute.Relation<
@@ -1247,6 +1246,14 @@ export interface ApiWisataWisata extends Schema.CollectionType {
       'api::tiket.tiket'
     >;
     tiket: Attribute.BigInteger & Attribute.DefaultTo<'5000'>;
+    content: Attribute.RichText &
+      Attribute.CustomField<
+        'plugin::ckeditor.CKEditor',
+        {
+          output: 'HTML';
+          preset: 'standard';
+        }
+      >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
