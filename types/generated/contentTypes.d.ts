@@ -942,6 +942,7 @@ export interface ApiHadiahHadiah extends Schema.CollectionType {
     redeem_point: Attribute.BigInteger & Attribute.Required;
     image: Attribute.Media;
     stock: Attribute.BigInteger & Attribute.Required & Attribute.DefaultTo<'0'>;
+    location: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

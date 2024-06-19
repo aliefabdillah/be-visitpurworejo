@@ -218,7 +218,6 @@ module.exports = createCoreController('api::wisata.wisata', ({ strapi }) => ({
   async getWisataPopular(ctx){
     try {
       await strapi.db.query('api::wisata.wisata').findMany({
-        limit: 5,
         populate: {
           wisata_favorite_id: true,
           img_cover: true,
