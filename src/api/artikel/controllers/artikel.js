@@ -51,11 +51,17 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
             status: {
               $contains: status === 'published' ? 'published' : status === 'draft' ? 'draft' : 'verification',
             }
-          }
+          },
+          sort: {
+            title: 'asc'
+          } 
         })
       } else {
         resultData = await strapi.entityService.findMany('api::artikel.artikel', {
-          populate: ['img_cover', 'kategori_id', 'user_id'],          
+          populate: ['img_cover', 'kategori_id', 'user_id'],
+          sort: {
+            title: 'asc'
+          }         
         })
       }
 
@@ -168,7 +174,7 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
 
     try {
       const resultData = await strapi.db.query('api::artikel.artikel').findOne({
-        select: ['id', 'title', 'slug', 'short_content', 'publish_date', 'content', 'status'], 
+        select: ['id', 'title', 'slug', 'short_content', 'publish_date', 'content', 'status', 'notes'], 
         where: { slug: slug },
         populate: {
           img_cover: true,

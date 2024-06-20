@@ -39,6 +39,9 @@
       "type": "biginteger",
       "default": "0",
       "required": true
+    },
+    "location": {
+      "type": "string"
     }
   }
 }
