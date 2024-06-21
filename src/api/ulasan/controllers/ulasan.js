@@ -79,7 +79,7 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
     }
   },
 
-  async getTotalUlasanWisata(ctx){
+  async getTotalUlasanWisata(ctx) {
     // @ts-ignore
     const slug = ctx.request.params.slug
 
@@ -89,14 +89,14 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
           $and: [
             {
               ['post_wisata_id']: {
-                slug: { $eq : slug}
+                slug: { $eq: slug }
               },
             },
             {
               isDeleted: false
             }
           ]
-          
+
         }
       });
 
@@ -108,20 +108,20 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
     }
   },
 
-  async getUlasanByWisata(ctx){
+  async getUlasanByWisata(ctx) {
     // @ts-ignore
     const slug = ctx.request.params.slug
     const { category } = ctx.request.query
 
     let sortFilter
     if (category === 'Best' || category === '') {
-      sortFilter = { like : 'desc' }
+      sortFilter = { like: 'desc' }
     }
     if (category === 'Newest') {
-      sortFilter = { posting_date : 'desc' }
+      sortFilter = { posting_date: 'desc' }
     }
     if (category === 'Oldest') {
-      sortFilter = { posting_date : 'asc' }
+      sortFilter = { posting_date: 'asc' }
     }
 
     try {
@@ -129,9 +129,9 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
         select: ['id', 'content', 'like', 'dislike', 'posting_date', 'isDeleted'],
         orderBy: sortFilter,
         where: {
-          $and:[
+          $and: [
             {
-              ['post_wisata_id']:{
+              ['post_wisata_id']: {
                 slug: slug
               }
             },
@@ -162,7 +162,7 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
                   img_profile: true
                 }
               },
-              replied_to_id:{
+              replied_to_id: {
                 select: ['id'],
                 populate: {
                   user_id: {
@@ -231,7 +231,7 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
           $and: [
             {
               ['post_wisata_id']: {
-                jenis_wisata: { $eq: jenis_wisata}
+                jenis_wisata: { $eq: jenis_wisata }
               }
             },
             {
@@ -257,7 +257,7 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
     }
   },
 
-  async getUlasanAccount(ctx){
+  async getUlasanAccount(ctx) {
     const user = ctx.state.user
 
     try {
@@ -272,7 +272,7 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
           },
           child_comment_id: true,
           post_wisata_id: {
-            select: ['id', 'name', 'slug', 'jenis_wisata'],  
+            select: ['id', 'name', 'slug', 'jenis_wisata'],
           }
         },
         where: {
@@ -287,23 +287,22 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
             }
           ]
         },
-        orderBy: {posting_date: 'desc'}
+        orderBy: { posting_date: 'desc' }
       });
 
       if (ulasanData.length > 0) {
         ctx.send({ data: ulasanData })
       } else {
         ctx.send({
-          data: {
-            code: 401,
-            message: "Ulasan Not Found"
-          }
+          data: [],
+          code: 401,
+          message: "Ulasan Not Found",
         })
       }
     } catch (error) {
       console.error(error);
       ctx.badRequest('Error get Ulasan User');
     }
-    
+
   },
 }));
