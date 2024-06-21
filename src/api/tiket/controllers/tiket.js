@@ -35,18 +35,18 @@ module.exports = createCoreController('api::tiket.tiket', ({ strapi }) => ({
 
   async findByUser(ctx) {
     const user = ctx.state.user;
-
     try {
-      const response = await strapi.entityService.findMany('api::tiket.tiket', {
+      const response = await strapi.db.query('api::tiket.tiket').findMany({
         populate: {
-          user_id: {
-            filters: {
-              id: user.id
-            }
+          user_id: true,
+          wisata_id: {
+            fields: ['id', 'name', 'slug', 'location', 'jenis_wisata', 'tiket']
           },
-          wisata_id: true,
         },
-        sort: { createdAt: "desc" },
+        orderBy: { createdAt: "desc" },
+        where: {
+          user_id: user.id,
+        }
       })
 
       ctx.send({
