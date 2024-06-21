@@ -35,7 +35,6 @@ module.exports = createCoreController('api::tiket.tiket', ({ strapi }) => ({
 
   async findByUser(ctx) {
     const user = ctx.state.user;
-    console.log(user.id)
     try {
       const response = await strapi.db.query('api::tiket.tiket').findMany({
         populate: {

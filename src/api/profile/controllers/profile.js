@@ -225,7 +225,6 @@ module.exports = {
           id: profileId
         }
       })
-      console.log(newProfileData.img_profile)
       ctx.send({
         message: 'Profile Updated',
         data: newProfileData,

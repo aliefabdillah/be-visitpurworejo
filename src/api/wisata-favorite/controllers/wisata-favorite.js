@@ -74,7 +74,6 @@ module.exports = createCoreController('api::wisata-favorite.wisata-favorite', ({
       });
 
       if (toDelete.length > 0) {
-        console.log(toDelete)
         await Promise.all(
           toDelete.map(({ id }) =>
             strapi.db.query("api::wisata-favorite.wisata-favorite").delete({
