@@ -72,10 +72,9 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
         })
       }else {
         ctx.send({
-          data: {
-            code: 401,
-            message: "Articles Not Found"
-          }
+          data: [],
+          code: 401,
+          message: "Articles Not Found",
         })
       }
     } catch (error) {
@@ -328,10 +327,9 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
         })
       }else {
         ctx.send({
-          data: {
-            code: 401,
-            message: "Articles Not Found"
-          }
+          data: [],
+          code: 401,
+          message: "Articles Not Found",
         })
       }
 
@@ -373,10 +371,9 @@ module.exports = createCoreController('api::artikel.artikel', ({ strapi }) => ({
         ctx.send({ data: data})
       } else {
         ctx.send({
-          data: {
-            code: 401,
-            message: "Cerita Not Found"
-          }
+          data: [],
+          code: 401,
+          message: "Cerita Not Found",
         })
       }
 
