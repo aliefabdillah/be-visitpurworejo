@@ -195,10 +195,9 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
         ctx.send({ data: resultData });
       } else {
         ctx.send({
-          data: {
-            code: 401,
-            message: "Ulasan Not Found"
-          }
+          data: [],
+          code: 401,
+          message: "Ulasan Not Found",
         })
       }
 
@@ -245,10 +244,9 @@ module.exports = createCoreController('api::ulasan.ulasan', ({ strapi }) => ({
         ctx.send({ data: resultData })
       } else {
         ctx.send({
-          data: {
-            code: 401,
-            message: "Review Not Found"
-          }
+          data: [],
+          code: 401,
+          message: "Review Not Found",
         })
       }
     } catch (error) {
